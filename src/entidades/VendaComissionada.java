@@ -7,6 +7,7 @@ public class VendaComissionada {
 	private int ano;
 	private float valor;
 	private ContratoComissionado contrComissionado;
+	
 	public VendaComissionada(int id, int mes, int ano, float valor, ContratoComissionado contrComissionado) {
 		super();
 		this.id = id;
@@ -15,11 +16,9 @@ public class VendaComissionada {
 		this.valor = valor;
 		this.contrComissionado = contrComissionado;
 	}
+	
 	public int getId() {
 		return id;	
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public int getMes() {
 		return mes;
@@ -46,6 +45,4 @@ public class VendaComissionada {
 		this.contrComissionado = contrComissionado;
 	}
 	
-	
-
 }

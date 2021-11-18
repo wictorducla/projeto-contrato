@@ -4,19 +4,19 @@ import java.util.Date;
 
 public abstract class Contrato {
 	
-	private int id;
+	private int id = 0;
 	private Date dataInicio;
 	private Colaborador colaborador;
 	private boolean ativo;
 	
 	
 	
-	public Contrato(int id, Date dataInicio, Colaborador colaborador, boolean ativo) {
+	public Contrato(Date dataInicio, Colaborador colaborador) {
 		super();
-		this.id = id;
+		this.id = id++;
 		this.dataInicio = dataInicio;
 		this.colaborador = colaborador;
-		this.ativo = ativo;
+		this.ativo = true;
 	}
 
 	public void encerrarContrato() {

@@ -9,12 +9,12 @@ public class ContratoComissionado extends Contrato{
 	
 	public float calcVencimento(float vlFaturam) {
 		
-		return 2;
+		return 0;
 	}
 
 	public ContratoComissionado(int id, Date dataInicio, Colaborador colaborador, boolean ativo, float percComissao,
 			float ajudaCusto) {
-		super(id, dataInicio, colaborador, ativo);
+		super(dataInicio, colaborador);
 		this.percComissao = percComissao;
 		this.ajudaCusto = ajudaCusto;
 	}
