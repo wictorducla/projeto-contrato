@@ -3,6 +3,7 @@ package entidades;
 import java.util.Date;
 
 public abstract class Contrato {
+	
 	private int id;
 	private Date dataInicio;
 	private Colaborador colaborador;

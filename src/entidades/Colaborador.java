@@ -15,6 +15,7 @@ public class Colaborador {
 		this.cpf = cpf;
 		this.name = name;
 		this.dataNascimento = dataNascimento;
+		this.situacao = false;
 	}
 	
 	public boolean validarCpf() {
