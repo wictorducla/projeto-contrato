@@ -13,14 +13,16 @@ public class ContratoAssalariado extends Contrato{
 		return 0;
 	}
 
-	public ContratoAssalariado(int id, Date dataInicio, 
-			Colaborador colaborador, boolean ativo, float salarioMensal,
+
+	public ContratoAssalariado(Date dataInicio, Date dataEncerramento, Colaborador colaborador, float salarioMensal,
 			float percInsalubridade, float percPericulosidade) {
-		super(dataInicio, colaborador);
+		super(dataInicio, dataEncerramento, colaborador);
 		this.salarioMensal = salarioMensal;
 		this.percInsalubridade = percInsalubridade;
 		this.percPericulosidade = percPericulosidade;
 	}
+
+
 
 	public float getSalarioMensal() {
 		return salarioMensal;

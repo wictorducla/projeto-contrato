@@ -7,9 +7,9 @@ public class ContratoHorista extends Contrato{
 	private int horasMes;
 	private float valorHora;
 	
-	public ContratoHorista(int id, Date dataInicio, Colaborador colaborador, boolean ativo, int horasMes,
+	public ContratoHorista(Date dataInicio, Date dataEncerramento, Colaborador colaborador, int horasMes,
 			float valorHora) {
-		super(dataInicio, colaborador);
+		super(dataInicio, dataEncerramento, colaborador);
 		this.horasMes = horasMes;
 		this.valorHora = valorHora;
 	}

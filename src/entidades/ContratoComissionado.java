@@ -12,9 +12,9 @@ public class ContratoComissionado extends Contrato{
 		return 0;
 	}
 
-	public ContratoComissionado(int id, Date dataInicio, Colaborador colaborador, boolean ativo, float percComissao,
+	public ContratoComissionado(Date dataInicio, Date dataEncerramento, Colaborador colaborador, float percComissao,
 			float ajudaCusto) {
-		super(dataInicio, colaborador);
+		super(dataInicio, dataEncerramento, colaborador);
 		this.percComissao = percComissao;
 		this.ajudaCusto = ajudaCusto;
 	}
