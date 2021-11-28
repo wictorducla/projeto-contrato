@@ -10,17 +10,19 @@ public class ContratoAssalariado extends Contrato{
 	
 	public float calcVencimento() {
 		
-		return 2;
+		return 0;
 	}
 
-	public ContratoAssalariado(int id, Date dataInicio, 
-			Colaborador colaborador, boolean ativo, float salarioMensal,
+
+	public ContratoAssalariado(Date dataInicio, Date dataEncerramento, Colaborador colaborador, float salarioMensal,
 			float percInsalubridade, float percPericulosidade) {
-		super(id, dataInicio, colaborador, ativo);
+		super(dataInicio, dataEncerramento, colaborador);
 		this.salarioMensal = salarioMensal;
 		this.percInsalubridade = percInsalubridade;
 		this.percPericulosidade = percPericulosidade;
 	}
+
+
 
 	public float getSalarioMensal() {
 		return salarioMensal;

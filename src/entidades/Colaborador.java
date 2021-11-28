@@ -5,15 +5,15 @@ import java.util.Date;
 public class Colaborador {
 	private String matricula;
 	private String cpf;
-	private String name;
+	private String nome;
 	private Date dataNascimento;
 	private boolean situacao;
 	
 	
-	public Colaborador(String matricula, String cpf, String name, Date dataNascimento) {
+	public Colaborador(String matricula, String cpf, String nome, Date dataNascimento) {
 		this.matricula = matricula;
 		this.cpf = cpf;
-		this.name = name;
+		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.situacao = false;
 	}
@@ -74,11 +74,11 @@ public class Colaborador {
 		}
 	}
 	
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	public String getMatricula() {
 		return matricula;

@@ -4,19 +4,20 @@ import java.util.Date;
 
 public abstract class Contrato {
 	
-	private int id;
+	private int id = 0;
 	private Date dataInicio;
+	private Date dataEncerramento;
 	private Colaborador colaborador;
 	private boolean ativo;
 	
 	
 	
-	public Contrato(int id, Date dataInicio, Colaborador colaborador, boolean ativo) {
-		super();
-		this.id = id;
+	public Contrato(Date dataInicio, Date dataEncerramento, Colaborador colaborador) {
+		this.id = id++;
 		this.dataInicio = dataInicio;
+		this.dataEncerramento = dataEncerramento;
 		this.colaborador = colaborador;
-		this.ativo = ativo;
+		this.ativo = true;
 	}
 
 	public void encerrarContrato() {
@@ -46,6 +47,19 @@ public abstract class Contrato {
 
 	public boolean isAtivo() {
 		return ativo;
+	}
+
+	public Date getDataEncerramento() {
+		return dataEncerramento;
+	}
+
+	@Override
+	public String toString() {
+		return "Contrato [id= " + id + 
+				"\nData de inicio= " + dataInicio + 
+				"\nData de encerramento= " + dataEncerramento + 
+				"\nColaborador= " + colaborador + 
+				"\nAtivo= " + ativo;
 	}
 
 	
