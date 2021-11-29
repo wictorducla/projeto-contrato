@@ -52,15 +52,20 @@ public abstract class Contrato {
 	public Date getDataEncerramento() {
 		return dataEncerramento;
 	}
+	
+	public void setDataEncerramento(Date dataEncerramento) {
+		this.dataEncerramento = dataEncerramento;
+	}
 
 	@Override
 	public String toString() {
-		return "Contrato [id= " + id + 
+		return "Contrato id= " + id + 
 				"\nData de inicio= " + dataInicio + 
 				"\nData de encerramento= " + dataEncerramento + 
 				"\nColaborador= " + colaborador + 
 				"\nAtivo= " + ativo;
 	}
+
 
 	
 	

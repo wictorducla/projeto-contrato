@@ -46,16 +46,22 @@ public class App {
 				consultarContrato();
 				break;
 			case 4:
+				encerrarContrato();
 				break;
 			case 5:
+				listarColaborador();
 				break;
-			case 6: 
+			case 6:
+				consultarContratoColaborador();
 				break;
 			case 7:
+				lancarVendasComissionadas();
 				break;
 			case 8:
+				emitirFolhaPagamento();
 				break;
 			case 0:
+				System.out.println("Programa finalizado");
 				return;
 			default:
 				System.out.println("Opção incorreta");
@@ -77,6 +83,15 @@ public class App {
 	public static Contrato pesquisarContrato(String matricula) {
 		for (Contrato contrato : listaContratos) {
 			if (contrato.getColaborador().getMatricula() == matricula) {
+				return contrato;
+			}
+		}
+		return null;
+	}
+	
+	public static Contrato pesquisarContrato(int id) {
+		for (Contrato contrato : listaContratos) {
+			if (contrato.getId() == id) {
 				return contrato;
 			}
 		}
@@ -163,7 +178,7 @@ public class App {
 	}
 
 	public static void registrarContrato() throws ParseException {
-		while(true) {
+		while (true) {
 			System.out.println("Selecione o tipo de contrato que deseja registrar\n");
 			System.out.println("---**Tipos de contratos**---\n");
 			System.out.println("1 - Contrato assalariado");
@@ -173,7 +188,7 @@ public class App {
 			System.out.print("Digite a opção: ");
 			int opcao = ler.nextInt();
 			switch (opcao) {
-			
+
 			case 1:
 				registrarContratoAssalariado();
 				break;
@@ -191,61 +206,155 @@ public class App {
 			}
 		}
 	}
-	
+
 	public static void consultarContrato() {
-		
+
 		System.out.println(" **Consultar contrato** ");
-		
-		while(true) {
-			
-			String matricula = "";
-			
+
+		while (true) {
+
+			int id = 0;
+
 			try {
-			System.out.println("Digite a matrícula: ");
-			matricula = ler.next();
-			
+				System.out.println("Digite o ID: ");
+				id = ler.nextInt();
+
 			}
-			
-			catch(Exception e) {
+
+			catch (Exception e) {
 				System.out.println("Digite um número válido! ");
-				
+
 			}
+
+			Contrato contratoEncontrado = pesquisarContrato(id);
 			
+			System.out.println("Contrato");
+			System.out.println("ID: " + contratoEncontrado.getId());
+			System.out.println("Data de inicio: " + contratoEncontrado.getDataInicio());
+			System.out.println("Data de encerramento: " + contratoEncontrado.getDataEncerramento());
+			System.out.println("Situação: " + contratoEncontrado.isAtivo());
+
+			if (contratoEncontrado instanceof ContratoAssalariado) {
+				System.out.println("Tipo de contrato: Contrato assalariado");
+			}
+
+			if (contratoEncontrado instanceof ContratoComissionado) {
+				System.out.println("Tipo de contrato: Contrato comissionado");
+			}
+
+			if (contratoEncontrado instanceof ContratoHorista) {
+				System.out.println("Tipo de contrato: Contrato horista");
+			}
+
+			System.out.println("Colaborador	");
+			System.out.println("Matricula: " + contratoEncontrado.getColaborador().getMatricula());
+			System.out.println("Nome: " + contratoEncontrado.getColaborador().getNome());
+			System.out.println("CPF: " + contratoEncontrado.getColaborador().getCpf());
+			System.out.println("Situação: " + contratoEncontrado.getColaborador().isSituacao());
+
+		}
+	}
+	
+	public static void encerrarContrato() throws ParseException {
+		System.out.println(" **Encerrar contrato** ");
+
+		while (true) {
+
+			String matricula = "";
+
+			try {
+				System.out.println("Digite a matrícula: ");
+				matricula = ler.next();
+			}
+			catch (Exception e) {
+				System.out.println("Digite um número válido! ");
+			}
 			Colaborador colaboradorEncontrado = pesquisarColaborador(matricula);
-			
-			if(colaboradorEncontrado == null) {
-				System.out.println("Colaborador não cadastrado! Não há contrato"
-						+ "a ser exibido!");
+
+			if (colaboradorEncontrado == null) {
+				System.out.println("Colaborador não cadastrado! Não há contrato a ser exibido!");
 				continue;
 			}
 			
-				
-				Contrato contratoEncontrado = pesquisarContrato (matricula);
-				
-				
-				contratoEncontrado.getId();
-				contratoEncontrado.getDataInicio();
-				contratoEncontrado.getDataEncerramento();
-				contratoEncontrado.isAtivo();
-				contratoEncontrado.getColaborador().getMatricula();
-				contratoEncontrado.getColaborador().getNome();
-				contratoEncontrado.getColaborador().getCpf();
-				contratoEncontrado.getColaborador().isSituacao();
+			Contrato contratoEncontrado = pesquisarContrato(matricula);
 			
-			if(contratoEncontrado instanceof ContratoAssalariado) {
-				System.out.println("Contrato assalariado! ");
+			contratoEncontrado.getDataEncerramento();
+			if (contratoEncontrado == null || contratoEncontrado.isAtivo() == false) {
+				System.out.println("O contrato já está encerrado ou não existe");
 			}
 			
-			if(contratoEncontrado instanceof ContratoComissionado) {
-				System.out.println("Contrato comissionado! ");
-			}
+			SimpleDateFormat formato2 = new SimpleDateFormat("dd/MM/yyyy");
+			System.out.println("Digite a data de Encerramento (DD/MM/YYYY): ");
+			String dataInformadaEncerramento = ler.next();
+			Date dataEncerramento = formato2.parse(dataInformadaEncerramento);
 			
-			if(contratoEncontrado instanceof ContratoHorista) {
-				System.out.println("Contrato horista! ");
-			}
+			contratoEncontrado.setDataEncerramento(dataEncerramento);
+			
+			contratoEncontrado.encerrarContrato();
+			contratoEncontrado.getColaborador().desativar();
+			
+			System.out.println("Atribuido data de encerramento ao contrato e encerramento efetuado com sucesso!");
+			
 		}
 	}
 
+	public static void listarColaborador() {
+		for (Colaborador colaborador : listaColaboradores) {
+			if (colaborador.isSituacao() == true) {
+				System.out.println(" **COLABORADOR** ");
+				System.out.println("Matricula: " + colaborador.getMatricula());
+				System.out.println("Nome: " + colaborador.getNome());
+				System.out.println("CPF: " + colaborador.getCpf());
+			} else {
+				int cont = 0;
+				cont ++;
+				if (cont == listaColaboradores.size()) {
+					System.out.println("Nenhum colaborador está ativo");
+				}
+			}
+		}
+	}
+	
+	public static void consultarContratoColaborador() {
+		System.out.println("Informar a matricula ou CPF do colaborador: ");
+		String identificador = ler.next();
+		
+		Contrato contratoEncontrado = pesquisarContrato(identificador);
+		
+		System.out.println(" **COLABORADOR** ");
+		System.out.println("Matricula: " + contratoEncontrado.getColaborador().getMatricula());
+		System.out.println("Nome: " + contratoEncontrado.getColaborador().getNome());
+		System.out.println("CPF: " + contratoEncontrado.getColaborador().getCpf());
+		System.out.println("Situação: " + contratoEncontrado.getColaborador().isSituacao());
+		System.out.println("\n **CONTRATO** ");
+		System.out.println("ID: " + contratoEncontrado.getId());
+		if (contratoEncontrado instanceof ContratoAssalariado) {
+			System.out.println("Tipo de contrato: Contrato assalariado");
+		}
+		if (contratoEncontrado instanceof ContratoComissionado) {
+			System.out.println("Tipo de contrato: Contrato comissionado");
+		}
+		if (contratoEncontrado instanceof ContratoHorista) {
+			System.out.println("Tipo de contrato: Contrato horista");
+		}
+		System.out.println("Data de inicio: " + contratoEncontrado.getDataInicio());
+		System.out.println("Data de encerramento: " + contratoEncontrado.getDataEncerramento());
+		if (contratoEncontrado.isAtivo() == true) {
+			System.out.println("Contrato ativo");
+		}else {
+			System.out.println("Contrato inativo");
+		}
+		
+	}
+	
+	public static void lancarVendasComissionadas() {
+		
+	}
+	
+	public static void emitirFolhaPagamento() {
+		
+	}
+	
 	public static boolean validarCpf(String cpf) {
 		// verifica CPFs formados por uma sequencia de numeros iguais
 		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
