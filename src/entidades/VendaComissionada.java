@@ -2,15 +2,14 @@ package entidades;
 
 public class VendaComissionada {
 	
-	private int id;
+	private int id = 0;
 	private int mes;
 	private int ano;
 	private float valor;
 	private ContratoComissionado contrComissionado;
 	
-	public VendaComissionada(int id, int mes, int ano, float valor, ContratoComissionado contrComissionado) {
-		super();
-		this.id = id;
+	public VendaComissionada(int mes, int ano, float valor, ContratoComissionado contrComissionado) {
+		this.id = id++;
 		this.mes = mes;
 		this.ano = ano;
 		this.valor = valor;

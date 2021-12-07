@@ -15,8 +15,18 @@ public class ContratoHorista extends Contrato{
 	}
 
 	public float calcVencimento() {
+		float vencimento = valorHora * horasMes;
+		float seguro = 0;
+		if(vencimento <= 5000) {
+			seguro = (2/100) * vencimento;
+			vencimento -= seguro;
+		}else if(seguro > 5000) {
+			seguro = (float) ((2.5/100) * vencimento);
+			vencimento -= seguro;
+			
+		}
 		
-		return 0;
+		return vencimento;
 	}
 
 	public int getHorasMes() {

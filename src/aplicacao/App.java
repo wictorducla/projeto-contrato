@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,11 +13,13 @@ import entidades.Contrato;
 import entidades.ContratoAssalariado;
 import entidades.ContratoComissionado;
 import entidades.ContratoHorista;
+import entidades.VendaComissionada;
 
 public class App {
 
 	static List<Colaborador> listaColaboradores = new ArrayList<>();
 	static List<Contrato> listaContratos = new ArrayList<>();
+	static List<VendaComissionada> listaVendasComissionadas = new ArrayList<>();
 	static Scanner ler = new Scanner(System.in);
 
 	public static void main(String[] args) throws ParseException {
@@ -88,7 +89,7 @@ public class App {
 		}
 		return null;
 	}
-	
+
 	public static Contrato pesquisarContrato(int id) {
 		for (Contrato contrato : listaContratos) {
 			if (contrato.getId() == id) {
@@ -125,6 +126,8 @@ public class App {
 	}
 
 	public static void InserirColaborador() throws ParseException {
+		System.out.println(" --**Inserir colaborador**-- ");
+
 
 		while (true) {
 			String matricula = "";
@@ -154,7 +157,9 @@ public class App {
 			System.out.print("Digite o CPF do colaborador: ");
 			cpf = ler.next();
 
-			if (validarCpf(cpf) == false) {
+			Colaborador cpfColaborador = new Colaborador(cpf);
+
+			if (cpfColaborador.validarCpf() == false) {
 				System.out.println("CPF inválido!! ");
 				continue;
 			}
@@ -180,7 +185,7 @@ public class App {
 	public static void registrarContrato() throws ParseException {
 		while (true) {
 			System.out.println("Selecione o tipo de contrato que deseja registrar\n");
-			System.out.println("---**Tipos de contratos**---\n");
+			System.out.println("--**Tipos de contratos**--\n");
 			System.out.println("1 - Contrato assalariado");
 			System.out.println("2 - Contrato comissionado");
 			System.out.println("3 - Contrato horista");
@@ -199,6 +204,7 @@ public class App {
 				registrarContratoHorista();
 				break;
 			case 0:
+				System.out.println("Registro finalizado!");
 				return;
 			default:
 				System.out.println("Opção incorreta");
@@ -209,7 +215,7 @@ public class App {
 
 	public static void consultarContrato() {
 
-		System.out.println(" **Consultar contrato** ");
+		System.out.println(" --**Consultar contrato**-- ");
 
 		while (true) {
 
@@ -227,7 +233,7 @@ public class App {
 			}
 
 			Contrato contratoEncontrado = pesquisarContrato(id);
-			
+
 			System.out.println("Contrato");
 			System.out.println("ID: " + contratoEncontrado.getId());
 			System.out.println("Data de inicio: " + contratoEncontrado.getDataInicio());
@@ -254,73 +260,73 @@ public class App {
 
 		}
 	}
-	
+
 	public static void encerrarContrato() throws ParseException {
-		System.out.println(" **Encerrar contrato** ");
+		System.out.println(" --**Encerrar contrato**-- ");
 
 		while (true) {
 
-			String matricula = "";
+			int id = 0;
+			;
 
 			try {
-				System.out.println("Digite a matrícula: ");
-				matricula = ler.next();
-			}
-			catch (Exception e) {
+				System.out.println("Digite o ID do contrato: ");
+				id = ler.nextInt();
+			} catch (Exception e) {
 				System.out.println("Digite um número válido! ");
 			}
-			Colaborador colaboradorEncontrado = pesquisarColaborador(matricula);
 
-			if (colaboradorEncontrado == null) {
-				System.out.println("Colaborador não cadastrado! Não há contrato a ser exibido!");
-				continue;
-			}
-			
-			Contrato contratoEncontrado = pesquisarContrato(matricula);
-			
+			Contrato contratoEncontrado = pesquisarContrato(id);
+
 			contratoEncontrado.getDataEncerramento();
 			if (contratoEncontrado == null || contratoEncontrado.isAtivo() == false) {
 				System.out.println("O contrato já está encerrado ou não existe");
 			}
-			
-			SimpleDateFormat formato2 = new SimpleDateFormat("dd/MM/yyyy");
+
 			System.out.println("Digite a data de Encerramento (DD/MM/YYYY): ");
 			String dataInformadaEncerramento = ler.next();
-			Date dataEncerramento = formato2.parse(dataInformadaEncerramento);
-			
-			contratoEncontrado.setDataEncerramento(dataEncerramento);
-			
-			contratoEncontrado.encerrarContrato();
-			contratoEncontrado.getColaborador().desativar();
-			
-			System.out.println("Atribuido data de encerramento ao contrato e encerramento efetuado com sucesso!");
-			
+
+			Date atual = new Date();
+			Date dataEncerramento = new SimpleDateFormat("dd/MM/yyyy").parse(dataInformadaEncerramento);
+			Calendar cVenc = Calendar.getInstance();
+			Calendar cAtual = Calendar.getInstance();
+
+			cVenc.setTime(dataEncerramento);
+			cAtual.setTime(atual);
+
+			if (cAtual.get(Calendar.DAY_OF_YEAR) < cVenc.get(Calendar.DAY_OF_YEAR)) {
+				System.out.println("Data de encerramento inválida");
+			} else {
+				contratoEncontrado.encerrarContrato(dataEncerramento);
+
+				System.out.println("Atribuido data de encerramento ao contrato e encerramento efetuado com sucesso!");
+			}
 		}
 	}
 
 	public static void listarColaborador() {
+		System.out.println(" --**Listar colaboradores**-- ");
 		for (Colaborador colaborador : listaColaboradores) {
-			if (colaborador.isSituacao() == true) {
-				System.out.println(" **COLABORADOR** ");
-				System.out.println("Matricula: " + colaborador.getMatricula());
-				System.out.println("Nome: " + colaborador.getNome());
-				System.out.println("CPF: " + colaborador.getCpf());
-			} else {
-				int cont = 0;
-				cont ++;
-				if (cont == listaColaboradores.size()) {
-					System.out.println("Nenhum colaborador está ativo");
-				}
+			if (0 == listaColaboradores.size()) {
+				System.out.println("Nenhum colaborador está ativo");
+			} else if (colaborador.isSituacao() == true) {
+					System.out.println(" **COLABORADOR** ");
+					System.out.println("Matricula: " + colaborador.getMatricula());
+					System.out.println("Nome: " + colaborador.getNome());
+					System.out.println("CPF: " + colaborador.getCpf());
+					
 			}
 		}
 	}
-	
+
 	public static void consultarContratoColaborador() {
+		System.out.println(" --**Consultar contrato colaborador**-- ");
+
 		System.out.println("Informar a matricula ou CPF do colaborador: ");
 		String identificador = ler.next();
-		
+
 		Contrato contratoEncontrado = pesquisarContrato(identificador);
-		
+
 		System.out.println(" **COLABORADOR** ");
 		System.out.println("Matricula: " + contratoEncontrado.getColaborador().getMatricula());
 		System.out.println("Nome: " + contratoEncontrado.getColaborador().getNome());
@@ -341,73 +347,88 @@ public class App {
 		System.out.println("Data de encerramento: " + contratoEncontrado.getDataEncerramento());
 		if (contratoEncontrado.isAtivo() == true) {
 			System.out.println("Contrato ativo");
-		}else {
+		} else {
 			System.out.println("Contrato inativo");
 		}
-		
+
 	}
-	
+
 	public static void lancarVendasComissionadas() {
+		System.out.println(" --**Lançar vendas comissionadas**-- ");
+		while(true) {
+			System.out.println("Digite o ID [0 para finalizar]: ");
+			int id = ler.nextInt();
+			if (id == 0) {
+				return;
+			}
+			Contrato contratoEncontrado = pesquisarContrato(id);
+			if (!(contratoEncontrado instanceof ContratoComissionado && contratoEncontrado.isAtivo() == true && contratoEncontrado != null)) {
+				System.out.println("O contrato informado não existe, está encerrado ou não é um contrato comissionado");
+			} else {
+				System.out.println("informe o mes da filha de pagamento: ");
+				int mes = ler.nextInt();
+				if (mes == 0) {
+					return;
+				}
+				System.out.println("informe o mes da filha de pagamento (yyyy): ");
+				int ano = ler.nextInt();
+				System.out.println("Valor total das vendas do mês: ");
+				float valor = ler.nextFloat();
+				
+				//VendaComissionada vendaComissionada = new VendaComissionada(mes, ano, valor,(ContratoComissionado)contratoEncontrado);
+				listaVendasComissionadas.add(new VendaComissionada(mes, ano, valor,(ContratoComissionado)contratoEncontrado));
+				
+				
+			}
+		}
 		
 	}
-	
+
 	public static void emitirFolhaPagamento() {
-		
-	}
-	
-	public static boolean validarCpf(String cpf) {
-		// verifica CPFs formados por uma sequencia de numeros iguais
-		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
-				|| cpf.equals("33333333333") || cpf.equals("44444444444") || cpf.equals("55555555555")
-				|| cpf.equals("66666666666") || cpf.equals("77777777777") || cpf.equals("88888888888")
-				|| cpf.equals("99999999999") || (cpf.length() != 11)) {
-			return (false);
-		}
-
-		char dig10, dig11;
-		int sm, i, r, num, peso;
-
-		try {
-			// Calculo do 1o. Digito Verificador
-			sm = 0;
-			peso = 10;
-			for (i = 0; i < 9; i++) {
-				num = (int) (cpf.charAt(i) - 48);
-				sm = sm + (num * peso);
-				peso = peso - 1;
+		System.out.println(" --**Emitir folha de pagamento**-- ");
+		while (true) {
+			System.out.println("informe o mes da filha de pagamento (de 1 a 12) [0 para finalizar]: ");
+			int mes = ler.nextInt();
+			if (mes == 0) {
+				return;
 			}
-
-			r = 11 - (sm % 11);
-			if ((r == 10) || (r == 11)) {
-				dig10 = '0';
-			} else {
-				dig10 = (char) (r + 48); // converte no respectivo caractere numerico
+			System.out.println("informe o mes da filha de pagamento (yyyy): ");
+			int ano = ler.nextInt();
+			
+			for (Contrato contrato : listaContratos) {
+				if (contrato.isAtivo() == true) {
+					System.out.println("ID: " + contrato.getId());
+					System.out.println("Matricula do colaborador: " + contrato.getColaborador().getMatricula());
+					System.out.println("Nome: " + contrato.getColaborador().getNome());
+					if (contrato instanceof ContratoAssalariado) {
+						System.out.println("Tipo de contrato: Contrato assalariado");
+						System.out.println("Matricula: " + contrato.getColaborador().getMatricula());
+						System.out.println("Nome: " + contrato.getColaborador().getNome());
+						System.out.println("Salário: " + ((ContratoAssalariado) contrato).calcVencimento());
+					}
+					if (contrato instanceof ContratoComissionado) {
+						float vlFaturam = 0;
+						for (VendaComissionada vendaComissionada : listaVendasComissionadas) {
+							if (vendaComissionada.getMes() == mes && vendaComissionada.getAno() == ano) {
+								vlFaturam += vendaComissionada.getValor();
+							}
+							System.out.println("Tipo de contrato: Contrato comissionado");
+							System.out.println("Matricula: " + contrato.getColaborador().getMatricula());
+							System.out.println("Nome: " + contrato.getColaborador().getNome());
+							System.out.println("Salário: " + ((ContratoComissionado) contrato).calcVencimento(vlFaturam));
+						}
+					}
+					if (contrato instanceof ContratoHorista) {
+						System.out.println("Tipo de contrato: Contrato horista");
+						System.out.println("Matricula: " + contrato.getColaborador().getMatricula());
+						System.out.println("Nome: " + contrato.getColaborador().getNome());
+						System.out.println("Salário: " + ((ContratoHorista) contrato).calcVencimento());
+						
+					}
+				}
 			}
-			// Calculo do 2o. Digito Verificador
-			sm = 0;
-			peso = 11;
-			for (i = 0; i < 10; i++) {
-				num = (int) (cpf.charAt(i) - 48);
-				sm = sm + (num * peso);
-				peso = peso - 1;
-			}
-			r = 11 - (sm % 11);
-			if ((r == 10) || (r == 11)) {
-				dig11 = '0';
-			} else {
-				dig11 = (char) (r + 48);
-			}
-			// Verifica se os digitos calculados conferem com os digitos informados.
-			if ((dig10 == cpf.charAt(9)) && (dig11 == cpf.charAt(10))) {
-				return (true);
-			} else {
-				return (false);
-			}
-		} catch (InputMismatchException erro) {
-			return (false);
 		}
 	}
-
 	public static void registrarContratoAssalariado() throws ParseException {
 
 		System.out.println("** Registrar Contrato assalariado **");
@@ -456,12 +477,12 @@ public class App {
 		System.out.println("Digite o percentual de periculosidade: ");
 		percPericulosidade = ler.nextFloat();
 
-		ContratoAssalariado contratoAssalariado = new ContratoAssalariado(dataInicio, dataEncerramento,
+		Contrato contrato = new ContratoAssalariado(dataInicio, dataEncerramento,
 				colaboradorEncontrado, salarioMensal, percInsalubridade, percPericulosidade);
 
-		System.out.println("O id do contrato é: " + contratoAssalariado.getId());
+		System.out.println("O id do contrato é: " + contrato.getId());
 
-		listaContratos.add(contratoAssalariado);
+		listaContratos.add(contrato);
 
 	}
 
@@ -511,18 +532,18 @@ public class App {
 		System.out.println("Digite a ajuda de custo: ");
 		ajudaCusto = ler.nextFloat();
 
-		ContratoComissionado contratoComissionado = (new ContratoComissionado(dataInicio, dataEncerramento,
+		Contrato contrato = (new ContratoComissionado(dataInicio, dataEncerramento,
 				colaboradorEncontrado, percentualComissao, ajudaCusto));
 
-		System.out.println("O id do contrato é: " + contratoComissionado.getId());
+		System.out.println("O id do contrato é: " + contrato.getId());
 
-		listaContratos.add(contratoComissionado);
+		listaContratos.add(contrato);
 
 	}
 
 	public static void registrarContratoHorista() throws ParseException {
 
-		System.out.println("** Registrar Contrato comissionado**");
+		System.out.println("---** Registrar Contrato comissionado**---");
 
 		if (listaColaboradores.isEmpty()) {
 			System.out.println("Não há colaborador na lista! ");
@@ -566,12 +587,12 @@ public class App {
 		System.out.println("Digite a ajuda de custo: ");
 		valorHora = ler.nextFloat();
 
-		ContratoHorista contratoHorista = (new ContratoHorista(dataInicio, dataEncerramento, colaboradorEncontrado,
-				horaMes, valorHora));
+		Contrato contrato = (new ContratoHorista(dataInicio, dataEncerramento, colaboradorEncontrado, horaMes,
+				valorHora));
 
-		System.out.println("O id do contrato é: " + contratoHorista.getId());
+		System.out.println("O id do contrato é: " + contrato.getId());
 
-		listaContratos.add(contratoHorista);
+		listaContratos.add(contrato);
 
 	}
 

@@ -18,11 +18,14 @@ public abstract class Contrato {
 		this.dataEncerramento = dataEncerramento;
 		this.colaborador = colaborador;
 		this.ativo = true;
+		this.colaborador.ativar();
 	}
 
-	public void encerrarContrato() {
-		if (ativo == true) {
-			ativo = false;
+	public void encerrarContrato(Date data) {
+		if (this.ativo == true) {
+			this.dataEncerramento = data;
+			this.ativo = false;
+			this.colaborador.desativar();
 			System.out.println("Contrato encerrado!");
 		} else {
 			System.out.println("Contrato já se encontra encerrado!");

@@ -9,8 +9,15 @@ public class ContratoAssalariado extends Contrato{
 	private float percPericulosidade;
 	
 	public float calcVencimento() {
-		
-		return 0;
+		float vencimento = salarioMensal + (salarioMensal * percPericulosidade) + (salarioMensal * percInsalubridade);
+		float seguro = vencimento * (2/100);
+		if(seguro < 25) {
+			seguro = 25f;
+		}else if (seguro > 150) {
+			seguro = 150f;
+		}
+		vencimento -= seguro;
+		return vencimento;
 	}
 
 
